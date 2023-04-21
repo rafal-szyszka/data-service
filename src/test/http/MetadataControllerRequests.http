@@ -1,0 +1,19 @@
+GET http://{{host}}/meta
+
+> {%
+client.test("Request passed, returned status is 200", function () {
+    client.assert(response.status === 200, "Response status expected 200, Found " + response.status)
+})
+ %}
+
+###
+
+GET http://{{host}}/meta/prodactivvity.Task
+
+###
+
+GET http://{{host}}/meta/organization.Customer
+
+###
+
+GET http://{{host}}/meta/organization.AppUser

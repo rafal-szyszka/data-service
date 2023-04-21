@@ -1,0 +1,103 @@
+### Successfully connected
+POST http://{{host}}/save
+
+> {%
+client.test("Request passed, returned status is 200", function () {
+    client.assert(response.status === 200, "Response status expected 200, Found " + response.status)
+})
+ %}
+
+### Successfully parsed input and saved data when Customer is root model
+POST http://{{host}}/save
+Content-Type: application/json
+
+{
+  "type": "Customer",
+  "obj": {
+    "name": "Prodactivv Rafał Szyszka",
+    "alias": "Prodactivv",
+    "taxNumber": "8991111222",
+    "projects": [
+      {
+        "name": "Bpower2 Cloud"
+      },
+      {
+        "name": "BP2 ML"
+      },
+      {
+        "name": "Bpower2"
+      }
+    ]
+  }
+}
+
+> {%
+client.test("Request passed, returned status is 200", function () {
+    client.assert(response.status === 200, "Response status expected 200, Found " + response.status)
+})
+ %}
+
+### Successfully parsed input and saved data when Project is root model
+POST http://{{host}}/save
+Content-Type: application/json
+
+{
+  "type": "Project",
+  "obj": {
+    "name": "Time Sheet",
+    "customers": [
+      {
+        "id": 1,
+        "name": "Prodactivv Rafał Szyszka",
+        "alias": "Prodactivv",
+        "taxNumber": "8991111222",
+        "projects": [
+          {
+            "name": "Bp2 ML"
+          }
+        ]
+      },
+      {
+        "name": "Bpower2 SP. Z O.O",
+        "alias": "Bpower2",
+        "taxNumber": "8990000333"
+      }
+    ]
+  }
+}
+
+> {%
+client.test("Request passed, returned status is 200", function () {
+    client.assert(response.status === 200, "Response status expected 200, Found " + response.status)
+})
+ %}
+
+
+### Successfully parsed input and saved data defined as tree structure
+POST http://{{host}}/save
+Content-Type: application/json
+
+{
+  "type": "organization.Customer",
+  "properties": {
+    "name": "Prodactivv Rafał Szyszka",
+    "alias": "Prodactivv",
+    "taxNumber": "8991111223"
+  },
+  "commands": [
+    {
+      "type": "prodactivvity.Project",
+      "parentProperty": "projects",
+      "properties": {
+        "name": "Time Sheet"
+      }
+    },
+    {
+      "type": "prodactivvity.Project",
+      "parentProperty": "projects",
+      "properties": {
+        "name": "BP2 ML"
+      }
+    }
+  ]
+}
