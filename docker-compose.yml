@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  data_service:
+    build:
+      context: ./container/kotlin/data-service
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/data_service_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=docker
+    ports:
+      - 8081:8081
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - dataServiceNetwork
+
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./container/data/data-service/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: data_service_db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dataServiceNetwork
+networks:
+  dataServiceNetwork:
