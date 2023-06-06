@@ -1,6 +1,6 @@
 FROM eclipse-temurin:17 as build
 
-LABEL org.opencontainers.image.authors="rafal.szyszka@bpower2.com"
+LABEL author="rafal.szyszka@bpower2.com"
 
 # Install git
 RUN apt-get -y update

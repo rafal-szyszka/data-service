@@ -8,33 +8,22 @@ services:
     restart: always
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/data_service_db
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=docker
+      - SPRING_DATASOURCE_USERNAME=data_service_db_admin
+      - SPRING_DATASOURCE_PASSWORD=data_service
     ports:
-      - 8081:8081
+      - 8080:8080
     depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - dataServiceNetwork
+      - postgres
 
   postgres:
-    image: postgres
+    image: postgres:latest
     restart: always
     ports:
       - 5432:5432
-    volumes:
-      - ./container/data/data-service/postgres:/var/lib/postgresql/data
+    container_name: postgres-container
+    #    volumes:
+    #      - ./container/data/data-service/postgres:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - dataServiceNetwork
-networks:
-  dataServiceNetwork:
+      - POSTGRES_PASSWORD=data_service
+      - POSTGRES_USER=data_service_db_admin
+      - POSTGRES_DB=data_service_db

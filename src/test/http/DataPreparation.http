@@ -1,4 +1,4 @@
-POST http://{{host}}/save/all
+POST http://{{host}}/DataService-0.0.1-SNAPSHOT/save/all
 Content-Type: application/json
 
 [
