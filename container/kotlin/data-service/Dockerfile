@@ -24,4 +24,4 @@ RUN ./mvnw install -DskipTests
 FROM tomcat:jdk17-temurin
 VOLUME /tmp
 ARG DEPENDENCY=/home/data-service/target
-COPY --from=build ${DEPENDENCY}/DataService-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/
+COPY --from=build ${DEPENDENCY}/data-service.war /usr/local/tomcat/webapps/
