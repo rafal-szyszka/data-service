@@ -18,7 +18,7 @@ RUN git clone https://microservices.docker.bot:Z^EMBM9fesHd3CgbQpuR2fvmSLpNYPy3@
 
 WORKDIR /home/data-service
 RUN chmod 755 mvnw
-RUN ./mvnw install -DskipTests
+RUN ./mvnw install -P default -DskipTests
 
 
 FROM tomcat:jdk17-temurin
