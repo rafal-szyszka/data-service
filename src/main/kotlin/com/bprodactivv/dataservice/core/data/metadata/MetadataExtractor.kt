@@ -30,9 +30,9 @@ class MetadataExtractor {
     fun getModels(): List<String> {
         return ClassPath.from(ClassLoader.getSystemClassLoader())
             .allClasses.stream()
-            .peek { print(it.packageName) }
-            .filter { it.packageName.startsWith(modelsBasePath) }
-            .map { it.name.replace("$modelsBasePath.", "") }
+//            .peek { println(it.packageName) }
+//            .filter { it.packageName.startsWith(modelsBasePath) }
+            .map { it.packageName }
             .toList()
     }
 
