@@ -2,8 +2,6 @@ package com.bprodactivv.dataservice.core.data.metadata
 
 import com.bprodactivv.dataservice.core.data.metadata.definition.FieldDefinition
 import com.google.common.reflect.ClassPath
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.PropertySource
 import org.springframework.stereotype.Component
 import java.lang.reflect.Field
 
@@ -11,14 +9,9 @@ const val PLURAL = "PLURAL"
 const val SINGULAR = "SINGULAR"
 
 @Component
-@PropertySource(value = ["classpath:DataHeaderExtractor.properties"])
-class MetadataExtractor {
-
-    @Value("\${modelsBasePath}")
-    private lateinit var modelsBasePath: String
-
-    @Value("\${constraintsPackage}")
-    private lateinit var constraintsPackage: String
+class MetadataExtractor(
+    private val configuration: MetadataExtractorConfiguration
+) {
 
     @Throws(ClassNotFoundException::class)
     fun getClassDeclaredFields(clazz: String): List<FieldDefinition> {
@@ -30,30 +23,29 @@ class MetadataExtractor {
     fun getModels(): List<String> {
         return ClassPath.from(ClassLoader.getSystemClassLoader())
             .allClasses.stream()
-//            .peek { println(it.packageName) }
-//            .filter { it.packageName.startsWith(modelsBasePath) }
-            .map { it.packageName }
+            .filter { it.packageName.startsWith("BOOT-INF.classes.${configuration.modelsBasePath}") }
+            .map { it.name.replace("BOOT-INF.classes.${configuration.modelsBasePath}.", "") }
             .toList()
     }
 
     @Throws(ClassNotFoundException::class)
     fun findClass(clazz: String): Class<*> {
-        return Class.forName("$modelsBasePath.$clazz")
+        return Class.forName("${configuration.modelsBasePath}.$clazz")
     }
 
     private fun createFieldDefinition(field: Field): FieldDefinition {
         val typeName = field.annotatedType.type.typeName
         val annotations = field.annotations
 
-        val type = when (field.type.packageName.startsWith(modelsBasePath)) {
-            true -> typeName.replace("$modelsBasePath.", "")
-            false -> typeName.replace("${field.type.packageName}.", "").replace("$modelsBasePath.", "")
+        val type = when (field.type.packageName.startsWith(configuration.modelsBasePath)) {
+            true -> typeName.replace("${configuration.modelsBasePath}.", "")
+            false -> typeName.replace("${field.type.packageName}.", "").replace("${configuration.modelsBasePath}.", "")
         }
 
         val constraints = when (annotations.size) {
             0 -> mutableListOf()
             else -> annotations
-                .filter { it.annotationClass.qualifiedName!!.startsWith(constraintsPackage) || it.annotationClass.qualifiedName == "jakarta.persistence.Id" }
+                .filter { it.annotationClass.qualifiedName!!.startsWith(configuration.constraintsPackage) || it.annotationClass.qualifiedName == "jakarta.persistence.Id" }
                 .mapNotNull { it.annotationClass.simpleName }
         }
 

@@ -20,8 +20,9 @@ WORKDIR /home/data-service
 RUN chmod 755 mvnw
 RUN ./mvnw clean install -P default -DskipTests
 
+ENTRYPOINT ["java", "-jar", "/home/data-service/target/data-service.jar"]
 
-FROM tomcat:jdk17-temurin
-VOLUME /tmp
-ARG DEPENDENCY=/home/data-service/target
-COPY --from=build ${DEPENDENCY}/data-service.war /usr/local/tomcat/webapps/
+#FROM tomcat:jdk17-temurin
+#VOLUME /tmp
+#ARG DEPENDENCY=/home/data-service/target
+#COPY --from=build ${DEPENDENCY}/data-service.war /usr/local/tomcat/webapps/
