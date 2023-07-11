@@ -1,10 +1,9 @@
-package com.bprodactivv.dataservice.core.data.repos.organization
+package com.bprodactivv.dataservice.core.data.repos.demo
 
 import com.bprodactivv.dataservice.core.data.metadata.MetadataExtractor
-import com.bprodactivv.dataservice.core.data.models.organization.AppUser
+import com.bprodactivv.dataservice.core.data.models.demo.AppUser
 import com.bprodactivv.dataservice.core.data.repos.PersistenceRepo
 import com.bprodactivv.dataservice.core.data.repos.ReadRepo
-import com.bprodactivv.dataservice.core.exceptions.EntityNotFoundSupplier
 import com.bprodactivv.dataservice.core.proql.ProQL
 import com.bprodactivv.dataservice.core.proql.models.ProQLQuery
 import jakarta.persistence.EntityManager
@@ -12,6 +11,7 @@ import jakarta.persistence.PersistenceContext
 import jakarta.persistence.criteria.Predicate
 import jakarta.persistence.metamodel.EntityType
 import org.springframework.stereotype.Service
+import java.util.*
 
 
 @Service("organization.AppUser")
@@ -31,8 +31,8 @@ class AppUserPersistenceRepo(
         return repo.save(x as AppUser)
     }
 
-    override fun findById(id: Int): Any {
-        return repo.findById(id.toLong()).orElseThrow(EntityNotFoundSupplier())
+    override fun findById(id: Long): Any? {
+        TODO("Not yet implemented")
     }
 
     override fun findAll(proQLQuery: ProQLQuery): Any {

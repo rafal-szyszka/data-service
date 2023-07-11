@@ -1,14 +1,13 @@
-package com.bprodactivv.dataservice.core.data.models.prodactivvity
+package com.bprodactivv.dataservice.core.data.models.demo
 
 import com.bprodactivv.dataservice.core.data.metadata.definition.constraints.NotInsertable
 import com.bprodactivv.dataservice.core.data.metadata.definition.constraints.Required
-import com.bprodactivv.dataservice.core.data.models.organization.AppUser
-import com.bprodactivv.dataservice.core.data.models.organization.Customer
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
-open class Task {
+@Table(name = "demo_task")
+open class DemoTask {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Task_GEN")
     @SequenceGenerator(name = "Task_GEN", sequenceName = "Task_SEQ")
@@ -44,5 +43,5 @@ open class Task {
 
     @ManyToOne
     @JoinColumn(name = "project_id")
-    open var project: Project? = null
+    open var demoProject: DemoProject? = null
 }

@@ -1,7 +1,7 @@
-package com.bprodactivv.dataservice.core.data.repos.prodactivvity
+package com.bprodactivv.dataservice.core.data.repos.demo
 
 import com.bprodactivv.dataservice.core.data.metadata.MetadataExtractor
-import com.bprodactivv.dataservice.core.data.models.prodactivvity.Project
+import com.bprodactivv.dataservice.core.data.models.demo.Customer
 import com.bprodactivv.dataservice.core.data.repos.PersistenceRepo
 import com.bprodactivv.dataservice.core.data.repos.ReadRepo
 import com.bprodactivv.dataservice.core.exceptions.UnknownRelationException
@@ -11,29 +11,27 @@ import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import jakarta.persistence.criteria.Predicate
 import jakarta.persistence.metamodel.EntityType
-import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
-@Service("prodactivvity.Project")
-@Transactional
-class ProjectPersistenceRepo(
-    private val repo: ProjectRepository,
+@Service("organization.Customer")
+class CustomerPersistenceRepo(
+    private val repo: CustomerRepository,
     private val metadataExtractor: MetadataExtractor,
 ) : PersistenceRepo, ReadRepo {
 
     @PersistenceContext
     private lateinit var entityManager: EntityManager
 
-    private lateinit var proQL: ProQL<Project>
+    private lateinit var proQL: ProQL<Customer>
 
-    private lateinit var entity: EntityType<Project>
+    private lateinit var entity: EntityType<Customer>
 
     override fun save(x: Any): Any {
-        return repo.save(x as Project)
+        return repo.save(x as Customer)
     }
 
-    override fun findById(id: Int): Any {
-        return repo.findById(id.toLong())
+    override fun findById(id: Long): Any? {
+        TODO("Not yet implemented")
     }
 
     override fun findAll(proQLQuery: ProQLQuery): Any {
@@ -52,18 +50,18 @@ class ProjectPersistenceRepo(
         val joinPredicates: MutableList<Predicate> = mutableListOf()
         proQLQuery.subQueries?.forEach {
             when (it.parentProperty) {
-                "customers" -> {
-                    val customer = proQL.root.join(
+                "projects" -> {
+                    val project = proQL.root.join(
                         entity.getList(
                             it.parentProperty,
-                            metadataExtractor.findClass("organization.Customer")
+                            metadataExtractor.findClass("prodactivvity.Project")
                         )
                     )
                     joinPredicates.addAll(
                         proQL.predicatesFor(
-                            customer,
+                            project,
                             it,
-                            metadataExtractor.getClassDeclaredFields("organization.Customer")
+                            metadataExtractor.getClassDeclaredFields("prodactivvity.Project")
                         )
                     )
                 }
@@ -76,11 +74,13 @@ class ProjectPersistenceRepo(
     }
 
     private fun initProQL() {
-        entity = entityManager.metamodel.entity(Project::class.java)
-        proQL = ProQL.Builder<Project>(entityManager)
-            .type(Project::class.java)
-            .fields(metadataExtractor.getClassDeclaredFields("prodactivvity.Project"))
-            .rootEntity(entityManager.metamodel.entity(Project::class.java))
+        entity = entityManager.metamodel.entity(Customer::class.java)
+        proQL = ProQL.Builder<Customer>(entityManager)
+            .type(Customer::class.java)
+            .fields(metadataExtractor.getClassDeclaredFields("organization.Customer"))
+            .rootEntity(entityManager.metamodel.entity(Customer::class.java))
             .build()
     }
+
+
 }

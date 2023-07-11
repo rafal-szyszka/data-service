@@ -1,6 +1,5 @@
-package com.bprodactivv.dataservice.core.data.models.prodactivvity
+package com.bprodactivv.dataservice.core.data.models.demo
 
-import com.bprodactivv.dataservice.core.data.models.organization.Customer
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonInclude
 import jakarta.persistence.*
@@ -8,8 +7,9 @@ import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 
 @Entity
+@Table(name = "demo_project")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-open class Project {
+open class DemoProject {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Project_GEN")
     @SequenceGenerator(name = "Project_GEN", sequenceName = "Project_SEQ")
@@ -18,7 +18,7 @@ open class Project {
 
     open var name: String? = null
 
-    @ManyToMany(mappedBy = "projects")
+    @ManyToMany(mappedBy = "demoProjects")
     @Fetch(FetchMode.SELECT)
     @JsonBackReference
     open var customers: MutableList<Customer>? = null

@@ -1,7 +1,7 @@
-package com.bprodactivv.dataservice.core.data.repos.prodactivvity
+package com.bprodactivv.dataservice.core.data.repos.demo
 
 import com.bprodactivv.dataservice.core.data.metadata.MetadataExtractor
-import com.bprodactivv.dataservice.core.data.models.prodactivvity.Task
+import com.bprodactivv.dataservice.core.data.models.demo.DemoTask
 import com.bprodactivv.dataservice.core.data.repos.PersistenceRepo
 import com.bprodactivv.dataservice.core.data.repos.ReadRepo
 import com.bprodactivv.dataservice.core.exceptions.UnknownRelationException
@@ -22,16 +22,16 @@ class TaskPersistenceRepo(
     @PersistenceContext
     private lateinit var entityManager: EntityManager
 
-    private lateinit var proQL: ProQL<Task>
+    private lateinit var proQL: ProQL<DemoTask>
 
-    private lateinit var entity: EntityType<Task>
+    private lateinit var entity: EntityType<DemoTask>
 
     override fun save(x: Any): Any {
-        return repo.save(x as Task)
+        return repo.save(x as DemoTask)
     }
 
-    override fun findById(id: Int): Any {
-        return repo.findById(id.toLong())
+    override fun findById(id: Long): Any {
+        return repo.findById(id)
     }
 
     override fun findAll(proQLQuery: ProQLQuery): Any {
@@ -122,11 +122,11 @@ class TaskPersistenceRepo(
     }
 
     private fun initProQL() {
-        entity = entityManager.metamodel.entity(Task::class.java)
-        proQL = ProQL.Builder<Task>(entityManager)
-            .type(Task::class.java)
+        entity = entityManager.metamodel.entity(DemoTask::class.java)
+        proQL = ProQL.Builder<DemoTask>(entityManager)
+            .type(DemoTask::class.java)
             .fields(metadataExtractor.getClassDeclaredFields("prodactivvity.Project"))
-            .rootEntity(entityManager.metamodel.entity(Task::class.java))
+            .rootEntity(entityManager.metamodel.entity(DemoTask::class.java))
             .build()
     }
 

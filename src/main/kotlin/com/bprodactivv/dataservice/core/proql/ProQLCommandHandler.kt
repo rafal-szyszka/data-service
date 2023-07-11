@@ -16,7 +16,7 @@ class ProQLCommandHandler(
 ) {
 
     @Throws(ClassNotFoundException::class)
-    fun save(command: ProQLCommand): Any {
+    fun save(command: ProQLCommand): Any? {
         val properties: List<SimpleEntry<String, Any>>? =
             command.commands?.map { SimpleEntry(it.parentProperty, save(it)) }
 
@@ -27,7 +27,7 @@ class ProQLCommandHandler(
         if (command.properties != null && command.properties?.containsKey("id") == true) {
             val id = command.properties?.get("id")
             if (id != null) {
-                return reposByType[command.type]!!.findById(id as Int)
+                return reposByType[command.type]!!.findById(id as Long)
             }
         }
 

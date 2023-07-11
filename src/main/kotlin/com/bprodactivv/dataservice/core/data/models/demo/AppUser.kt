@@ -1,8 +1,9 @@
-package com.bprodactivv.dataservice.core.data.models.organization
+package com.bprodactivv.dataservice.core.data.models.demo
 
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "demo_app_user")
 open class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "User_GEN")

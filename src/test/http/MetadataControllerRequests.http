@@ -8,7 +8,7 @@ client.test("Request passed, returned status is 200", function () {
 
 ###
 
-GET http://{{host}}/meta/prodactivvity.Task
+GET http://{{host}}/meta/agile.Task
 
 ###
 

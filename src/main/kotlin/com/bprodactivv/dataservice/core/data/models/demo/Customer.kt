@@ -1,11 +1,10 @@
-package com.bprodactivv.dataservice.core.data.models.organization
+package com.bprodactivv.dataservice.core.data.models.demo
 
-import com.bprodactivv.dataservice.core.data.models.prodactivvity.Project
 import jakarta.persistence.*
 
 @Entity
 @Table(
-    name = "customer", indexes = [
+    name = "demo_customer", indexes = [
         Index(name = "idx_customer_name", columnList = "name"),
         Index(name = "idx_customer_taxnumber", columnList = "taxNumber")
     ]
@@ -29,5 +28,5 @@ open class Customer {
         joinColumns = [JoinColumn(name = "customer_id")],
         inverseJoinColumns = [JoinColumn(name = "project_id")]
     )
-    open var projects: MutableList<Project>? = null
+    open var demoProjects: MutableList<DemoProject>? = null
 }

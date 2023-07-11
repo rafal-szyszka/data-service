@@ -23,8 +23,8 @@ class MetadataExtractor(
     fun getModels(): List<String> {
         return ClassPath.from(ClassLoader.getSystemClassLoader())
             .allClasses.stream()
-            .filter { it.packageName.startsWith("BOOT-INF.classes.${configuration.modelsBasePath}") }
-            .map { it.name.replace("BOOT-INF.classes.${configuration.modelsBasePath}.", "") }
+            .filter { it.packageName.startsWith(configuration.modelsBasePath) }
+            .map { it.name.replace("${configuration.modelsBasePath}.", "") }
             .toList()
     }
 
