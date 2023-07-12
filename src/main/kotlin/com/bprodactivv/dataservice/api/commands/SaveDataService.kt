@@ -9,12 +9,12 @@ class SaveDataService(
     private val proQLCommandHandler: ProQLCommandHandler
 ) {
 
-    fun saveData(command: ProQLCommand): Any {
+    fun saveData(command: ProQLCommand): Any? {
         return proQLCommandHandler.save(command)
     }
 
     fun saveAllData(commands: List<ProQLCommand>): List<Any>? {
-        return commands.map { saveData(it) }
+        return commands.mapNotNull { saveData(it) }
     }
 
 }

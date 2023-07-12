@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service
 
 @Service("prodactivvity.Task")
 class TaskPersistenceRepo(
-    private val repo: TaskRepository,
+    private val repo: DemoTaskRepository,
     private val metadataExtractor: MetadataExtractor,
 ) : PersistenceRepo, ReadRepo {
 

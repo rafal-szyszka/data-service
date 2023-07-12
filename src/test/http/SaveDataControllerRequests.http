@@ -12,22 +12,9 @@ POST http://{{host}}/save
 Content-Type: application/json
 
 {
-  "type": "Customer",
+  "type": "core.Client",
   "obj": {
-    "name": "Prodactivv Rafał Szyszka",
-    "alias": "Prodactivv",
-    "taxNumber": "8991111222",
-    "projects": [
-      {
-        "name": "Bpower2 Cloud"
-      },
-      {
-        "name": "BP2 ML"
-      },
-      {
-        "name": "Bpower2"
-      }
-    ]
+    "name": "BPBS Sp. z o.o."
   }
 }
 

@@ -17,14 +17,16 @@ class MetadataExtractor(
     fun getClassDeclaredFields(clazz: String): List<FieldDefinition> {
         val header = findClass(clazz)
         return header.declaredFields
+            .filter { field -> !(field.name.equals("CLASS_TYPE") || field.name.equals("Companion")) }
             .map { field: Field -> createFieldDefinition(field) }
     }
 
     fun getModels(): List<String> {
         return ClassPath.from(ClassLoader.getSystemClassLoader())
             .allClasses.stream()
-            .filter { it.packageName.startsWith(configuration.modelsBasePath) }
-            .map { it.name.replace("${configuration.modelsBasePath}.", "") }
+            .filter { it.packageName.startsWith("BOOT-INF.classes.${configuration.modelsBasePath}") }
+            .map { it.name.replace("BOOT-INF.classes.${configuration.modelsBasePath}.", "") }
+            .filter { !it.contains("\$Companion") }
             .toList()
     }
 

@@ -2,7 +2,6 @@ package com.bprodactivv.dataservice.core.proql
 
 import com.bprodactivv.dataservice.core.data.metadata.MetadataExtractor
 import com.bprodactivv.dataservice.core.data.metadata.PLURAL
-import com.bprodactivv.dataservice.core.data.repos.PersistenceRepo
 import com.bprodactivv.dataservice.core.proql.models.ProQLCommand
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
@@ -10,7 +9,7 @@ import java.util.AbstractMap.SimpleEntry
 
 @Component
 class ProQLCommandHandler(
-    private val reposByType: Map<String, PersistenceRepo>,
+    private val reposByType: Map<String, ProQLPersistenceService>,
     private val jackson: ObjectMapper,
     private val metadataExtractor: MetadataExtractor,
 ) {
@@ -27,7 +26,8 @@ class ProQLCommandHandler(
         if (command.properties != null && command.properties?.containsKey("id") == true) {
             val id = command.properties?.get("id")
             if (id != null) {
-                return reposByType[command.type]!!.findById(id as Long)
+                val intId: Int = id as Int
+                return reposByType[command.type]!!.findById(intId.toLong())
             }
         }
 

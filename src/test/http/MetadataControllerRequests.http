@@ -12,11 +12,11 @@ GET http://{{host}}/meta/agile.Task
 
 ###
 
-GET http://{{host}}/meta/prodactivvity.Project
+GET http://{{host}}/meta/core.Client
 
 ###
 
-GET http://{{host}}/meta/organization.Customer
+GET http://{{host}}/meta/core.SysUser
 
 ###
 

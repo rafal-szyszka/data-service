@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service
 @Service("prodactivvity.Project")
 @Transactional
 class ProjectPersistenceRepo(
-    private val repo: ProjectRepository,
+    private val repo: DemoProjectRepository,
     private val metadataExtractor: MetadataExtractor,
 ) : PersistenceRepo, ReadRepo {
 
