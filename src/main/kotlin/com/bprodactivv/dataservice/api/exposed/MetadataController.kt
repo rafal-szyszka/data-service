@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping(value = ["meta"])
+@RequestMapping(value = ["v1/meta"])
 class MetadataController(private val metadataService: MetadataService) {
 
     @GetMapping

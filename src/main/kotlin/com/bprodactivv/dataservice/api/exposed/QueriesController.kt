@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping(value = ["load"])
-class GetDataController(private val loadDataService: LoadDataService) {
+@RequestMapping(value = ["v1/queries"])
+class QueriesController(private val loadDataService: LoadDataService) {
 
     @PostMapping
     fun loadData(@RequestBody proQLQuery: ProQLQuery): ResponseEntity<Any?> {

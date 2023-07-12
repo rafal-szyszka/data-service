@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping(value = ["save"])
-class SaveDataController(private val saveDataService: SaveDataService) {
+@RequestMapping(value = ["v1/commands"])
+class CommandController(private val saveDataService: SaveDataService) {
 
     @PostMapping
     fun save(@RequestBody command: ProQLCommand): ResponseEntity<Any> {

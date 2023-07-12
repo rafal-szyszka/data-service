@@ -1,5 +1,5 @@
 ### Getting projects with name Time Sheet
-POST http://{{host}}/load
+POST http://{{host}}/v1/queries
 Content-Type: application/json
 
 {

@@ -1,14 +1,14 @@
 ### Successfully connected
-POST http://{{host}}/save
+POST http://{{host}}/v1/commands
 
 > {%
-client.test("Request passed, returned status is 200", function () {
-    client.assert(response.status === 200, "Response status expected 200, Found " + response.status)
-})
- %}
+    client.test("Request passed, returned status is 200", function () {
+        client.assert(response.status === 200, "Response status expected 200, Found " + response.status)
+    })
+%}
 
 ### Successfully parsed input and saved data when Customer is root model
-POST http://{{host}}/save
+POST http://{{host}}/v1/commands
 Content-Type: application/json
 
 {
@@ -25,7 +25,7 @@ client.test("Request passed, returned status is 200", function () {
  %}
 
 ### Successfully parsed input and saved data when Project is root model
-POST http://{{host}}/save
+POST http://{{host}}/v1/commands
 Content-Type: application/json
 
 {
@@ -61,7 +61,7 @@ client.test("Request passed, returned status is 200", function () {
 
 
 ### Successfully parsed input and saved data defined as tree structure
-POST http://{{host}}/save
+POST http://{{host}}/v1/commands
 Content-Type: application/json
 
 {
