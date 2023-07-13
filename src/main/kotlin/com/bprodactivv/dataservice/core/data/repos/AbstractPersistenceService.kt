@@ -16,7 +16,7 @@ abstract class AbstractPersistenceService<T : Any>(
     protected val metadataExtractor: MetadataExtractor,
     private val clazz: Class<T>,
     private val classType: String,
-) : ProQLPersistenceService {
+) : ProQLPersistenceService, ReadRepo {
 
     protected lateinit var proQL: ProQL<T>
 
@@ -31,7 +31,7 @@ abstract class AbstractPersistenceService<T : Any>(
 
     abstract fun addJoinsWithPredicates(proQLQuery: ProQLQuery): MutableList<Predicate>
 
-    fun findAll(proQLQuery: ProQLQuery): Any {
+    override fun findAll(proQLQuery: ProQLQuery): Any {
         val predicates = mutableListOf(
             *addJoinsWithPredicates(proQLQuery).toTypedArray(),
             *proQL.predicates(proQLQuery).toTypedArray()
