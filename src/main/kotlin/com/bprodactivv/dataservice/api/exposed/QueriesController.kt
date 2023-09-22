@@ -18,4 +18,10 @@ class QueriesController(private val loadDataService: LoadDataService) {
         return ResponseEntity.ok(load)
     }
 
+    @PostMapping("/paginated")
+    fun loadDataPaginated(@RequestBody proQLQuery: ProQLQuery): ResponseEntity<Any?> {
+        val load = loadDataService.load(proQLQuery)
+        return ResponseEntity.ok(load)
+    }
+
 }
