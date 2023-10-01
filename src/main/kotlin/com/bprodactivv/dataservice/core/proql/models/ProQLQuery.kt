@@ -4,6 +4,8 @@ open class ProQLQuery(
     open var type: String,
     open var properties: MutableMap<String, Any>?,
     open var subQueries: List<ProQLSubQuery>?,
+    open val page: Int?,
+    open val size: Int?
 )
 
 class ProQLSubQuery(
@@ -11,4 +13,4 @@ class ProQLSubQuery(
     override var properties: MutableMap<String, Any>?,
     override var subQueries: List<ProQLSubQuery>?,
     var parentProperty: String,
-) : ProQLQuery(type, properties, subQueries)
+) : ProQLQuery(type, properties, subQueries, page = null, size = null)
