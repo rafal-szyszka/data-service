@@ -6,6 +6,9 @@ import com.bprodactivv.dataservice.core.proql.models.ProQLQuery
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.*
 import jakarta.persistence.metamodel.EntityType
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 
 class ProQL<T> private constructor(
     private val entityManager: EntityManager,
@@ -71,4 +74,14 @@ class ProQL<T> private constructor(
         return entityManager.createQuery(criteria).resultList
     }
 
+    fun queryPaginated(pageable: Pageable): Page<T> {
+        val responseFromDb = entityManager.createQuery(criteria).resultList
+        if(responseFromDb.isEmpty()) return PageImpl(responseFromDb, pageable, 0L)
+        val offSetStart = pageable.pageNumber*pageable.pageSize
+        val offSetEnd = offSetStart + pageable.pageSize
+        return PageImpl(responseFromDb.subList(offSetStart, when(offSetEnd> responseFromDb.size) {
+            true -> responseFromDb.size
+            false -> offSetEnd
+        }), pageable, responseFromDb.size.toLong())
+    }
 }
