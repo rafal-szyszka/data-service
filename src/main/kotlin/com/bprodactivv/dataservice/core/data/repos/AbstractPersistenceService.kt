@@ -38,9 +38,14 @@ abstract class AbstractPersistenceService<T : Any>(
             *addJoinsWithPredicates(proQLQuery).toTypedArray(),
             *proQL.predicates(proQLQuery).toTypedArray()
         )
+
         if (proQLQuery.size != null && proQLQuery.page != null) {
-            val pageable : Pageable = PageRequest.of(proQLQuery.page!!-1, proQLQuery.size!!)
+            val pageable: Pageable = PageRequest.of(proQLQuery.page!! - 1, proQLQuery.size!!)
             return proQL.where(predicates).queryPaginated(pageable)
+        }
+
+        if (predicates.isEmpty()) {
+            return getRepository().findAll()
         }
 
         return proQL.where(predicates)
