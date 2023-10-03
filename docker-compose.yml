@@ -14,6 +14,7 @@ services:
       - 8081:8081
     depends_on:
       - postgres
+      - redis
 
   postgres:
     image: postgres:latest
@@ -27,3 +28,10 @@ services:
       - POSTGRES_PASSWORD=data_service
       - POSTGRES_USER=data_service_db_admin
       - POSTGRES_DB=data_service_db
+##  redis:
+##    image: redis:latest
+##    ports:
+##      - "6379:6379"
+##    environment:
+##      - ALLOW_EMPTY_PASSWORD=yes
+
