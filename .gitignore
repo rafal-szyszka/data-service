@@ -38,3 +38,5 @@ build/
 
 ### http tests
 *.http
+application-local.properties
+http-client.private.env.json
