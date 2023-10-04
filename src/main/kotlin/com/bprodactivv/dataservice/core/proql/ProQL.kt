@@ -74,26 +74,24 @@ class ProQL<T> private constructor(
         return entityManager.createQuery(criteria).resultList
     }
 
-    fun queryPaginated(pageable: Pageable): Page<T> {
-        val responseFromDb = entityManager.createQuery(criteria).resultList
-
-        if (responseFromDb.isEmpty()) {
-            return PageImpl(responseFromDb, pageable, 0L)
+    fun queryPaginated(pageable: Pageable, data: List<T>): Page<T> {
+        if (data.isEmpty()) {
+            return PageImpl(data, pageable, 0L)
         }
 
         val offsetStart = pageable.pageNumber * pageable.pageSize
         val offsetEnd = offsetStart + pageable.pageSize
 
         return PageImpl(
-            responseFromDb.subList(
+            data.subList(
                 offsetStart,
-                when (offsetEnd > responseFromDb.size) {
-                    true -> responseFromDb.size
+                when (offsetEnd > data.size) {
+                    true -> data.size
                     false -> offsetEnd
                 }
             ),
             pageable,
-            responseFromDb.size.toLong()
+            data.size.toLong()
         )
     }
 }

@@ -11,7 +11,6 @@ import jakarta.persistence.PersistenceContext
 import jakarta.persistence.criteria.Predicate
 import jakarta.persistence.metamodel.EntityType
 import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 
 abstract class AbstractPersistenceService<T : Any>(
@@ -40,8 +39,17 @@ abstract class AbstractPersistenceService<T : Any>(
         )
 
         if (proQLQuery.size != null && proQLQuery.page != null) {
-            val pageable: Pageable = PageRequest.of(proQLQuery.page!! - 1, proQLQuery.size!!)
-            return proQL.where(predicates).queryPaginated(pageable)
+            val data: List<T>
+            if (predicates.isEmpty()) {
+                data = getRepository().findAll()
+            } else {
+                data = proQL.where(predicates).query()
+            }
+
+            return proQL.queryPaginated(
+                PageRequest.of(proQLQuery.page!! - 1, proQLQuery.size!!),
+                data
+            )
         }
 
         if (predicates.isEmpty()) {
