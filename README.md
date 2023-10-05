@@ -303,10 +303,13 @@ ale ma też wady:
 Jest głównym mechanizmem odpowiedzialnym za działanie tego serwisu. `ProQL` odpowiada za ujednolicony interfejs
 pobierania i zapisu danych. Dzieli się na `ProQLQuery` -pobieranie danych oraz `ProQLCommand`-zapisywanie danych.
 
-- `ProQLQuery` - obiekt transferu danych odpowiadających za pobranie danych z bazy, składa się z 4 elementów
+- `ProQLQuery` - obiekt transferu danych odpowiadających za pobranie danych z bazy, składa się z 4 elementów 
+(2 opcjonalnych odpowiadających za paginację odpowiedzi)
   - `type` - nazwa typu w notacji `moduł.Typ` np.: `agile.Task` - odpowiada za określenie jakiego typu danych szukamy
   - `properties` - atrybuty tego typu - odpowiada za możliwość określenia jakie wartości mają mieć poszukiwane obiekty
     wybranego typu
+  - `page` - **pole opcjonalne** pozwalające określić stronę do wyświetlenia
+  - `size` - **pole opcjonalne** pozwalające określić rozmiar strony
   - `subQueries` - jest to w zasadzie zagnieżdżony `ProQLQuery` pozwalający określić jakie wartości maja mieć powiązane
     obiekty, od samego `ProQLQuery` różni się jedynie tym, że posiada dodatkowy atrybut `parentProperty`, który określa
     który atrybut klasy rodzica bierzemy pod uwagę
@@ -399,6 +402,22 @@ pobierania i zapisu danych. Dzieli się na `ProQLQuery` -pobieranie danych oraz 
     }
   }
   ```
+
+  Poniższe query pozwala pobrać wszystkie obiekty typu `agile.Task` które mają atrybut `type` = `Backend` i są 
+  podzielone na strony wielkości 10 rekordów i wyświetlamy pierwszą stronę
+  Odpowiedź będzie opakowana w informacjeo ilości elementów na wszystkich stronach, ilości stron i obecnej stronie na 
+  której jesteśmy
+  
+    ```json
+    {
+      "type": "agile.Task",
+      "properties": {
+        "type": "Backend"
+      },
+    "size": 10,
+    "page": 0
+    }
+    ```
 
   </details>
 
