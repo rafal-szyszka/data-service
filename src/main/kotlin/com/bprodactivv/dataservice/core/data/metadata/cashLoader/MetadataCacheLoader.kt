@@ -14,7 +14,7 @@ class MetadataCacheLoader(
 ) {
     @PostConstruct
     fun saveMetadata() {
-        val jedis = Jedis()
+        val jedis = Jedis(redisConfig.host, redisConfig.port.toInt())
         jedis.flushAll()
 
         val models = storeModelsMetadata(jedis)
