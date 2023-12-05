@@ -1,5 +1,6 @@
 package com.bprodactivv.dataservice.core.data.models.agile
 
+import com.bprodactivv.dataservice.core.data.metadata.definition.constraints.SaveByText
 import com.bprodactivv.dataservice.core.data.models.core.SysUser
 import jakarta.persistence.*
 import java.time.LocalDate
@@ -50,6 +51,7 @@ open class Task {
 
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @SaveByText(field = "name")
     open var project: Project? = null
 
     @ManyToOne

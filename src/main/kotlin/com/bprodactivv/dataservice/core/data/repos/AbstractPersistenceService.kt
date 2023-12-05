@@ -10,6 +10,7 @@ import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import jakarta.persistence.criteria.Predicate
 import jakarta.persistence.metamodel.EntityType
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.repository.JpaRepository
 
@@ -32,6 +33,7 @@ abstract class AbstractPersistenceService<T : Any>(
 
     abstract fun addJoinsWithPredicates(proQLQuery: ProQLQuery): MutableList<Predicate>
 
+    @Suppress("KotlinConstantConditions")
     override fun findAll(proQLQuery: ProQLQuery): Any {
         val predicates = mutableListOf(
             *addJoinsWithPredicates(proQLQuery).toTypedArray(),
@@ -39,40 +41,51 @@ abstract class AbstractPersistenceService<T : Any>(
         )
 
         if (proQLQuery.size != null && proQLQuery.page != null) {
-            val data: List<T>
-            if (predicates.isEmpty()) {
-                data = getRepository().findAll()
-            } else {
-                data = proQL.where(predicates).query()
-            }
-
-            return proQL.queryPaginated(
-                PageRequest.of(proQLQuery.page!! - 1, proQLQuery.size!!),
-                data
-            )
+            return getPaginatedResult(predicates, proQLQuery)
         }
 
         if (predicates.isEmpty()) {
             return getRepository().findAll()
         }
 
-        return proQL.where(predicates)
-            .query()
+        return proQL.where(predicates).query()
+    }
+
+    private fun getPaginatedResult(predicates: MutableList<Predicate>, proQLQuery: ProQLQuery): Page<T> {
+        val data: List<T> = if (predicates.isEmpty()) {
+            getRepository().findAll()
+        } else {
+            proQL.where(predicates).query()
+        }
+
+        return proQL.queryPaginated(
+            PageRequest.of(proQLQuery.page!! - 1, proQLQuery.size!!),
+            data
+        )
     }
 
     override fun findById(id: Long): Any? {
         return getRepository().findById(id)
     }
 
-    protected fun join(proQLSubQuery: ProQLSubQuery, classType: String): MutableList<Predicate> {
-        val client = proQL.root.join(
-            entity.getList(
-                proQLSubQuery.parentProperty,
-                metadataExtractor.findClass(classType)
+    protected fun join(proQLSubQuery: ProQLSubQuery, classType: String, isSingular: Boolean): MutableList<Predicate> {
+        val joined = when (isSingular) {
+            true -> proQL.root.join(
+                entity.getSingularAttribute(
+                    proQLSubQuery.parentProperty,
+                    metadataExtractor.findClass(classType)
+                )
             )
-        )
 
-        return proQL.predicatesFor(client, proQLSubQuery, metadataExtractor.getClassDeclaredFields(classType))
+            false -> proQL.root.join(
+                entity.getList(
+                    proQLSubQuery.parentProperty,
+                    metadataExtractor.findClass(classType)
+                )
+            )
+        }
+
+        return proQL.predicatesFor(joined, proQLSubQuery, metadataExtractor.getClassDeclaredFields(classType))
     }
 
     @PostConstruct

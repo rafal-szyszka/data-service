@@ -34,31 +34,31 @@ class TaskPersistenceService(
             when (it.parentProperty) {
                 "descriptionExtension" -> {
                     joinPredicates.addAll(
-                        join(it, Description.CLASS_TYPE)
+                        join(it, Description.CLASS_TYPE, isSingular = true)
                     )
                 }
 
                 "orderer", "performer" -> {
                     joinPredicates.addAll(
-                        join(it, SysUser.CLASS_TYPE)
+                        join(it, SysUser.CLASS_TYPE, isSingular = true)
                     )
                 }
 
                 "project" -> {
                     joinPredicates.addAll(
-                        join(it, Project.CLASS_TYPE)
+                        join(it, Project.CLASS_TYPE, isSingular = true)
                     )
                 }
 
                 "capacity" -> {
                     joinPredicates.addAll(
-                        join(it, Capacity.CLASS_TYPE)
+                        join(it, Capacity.CLASS_TYPE, isSingular = true)
                     )
                 }
 
                 "evaluation" -> {
                     joinPredicates.addAll(
-                        join(it, Evaluation.CLASS_TYPE)
+                        join(it, Evaluation.CLASS_TYPE, isSingular = true)
                     )
                 }
 
