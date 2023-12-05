@@ -1,5 +1,6 @@
 package com.bprodactivv.dataservice.core.data.metadata
 
+import com.bprodactivv.dataservice.core.data.metadata.definition.Constraints
 import com.bprodactivv.dataservice.core.data.metadata.definition.FieldDefinition
 import com.google.common.reflect.ClassPath
 import org.springframework.stereotype.Component
@@ -47,8 +48,24 @@ class MetadataExtractor(
         val constraints = when (annotations.size) {
             0 -> mutableListOf()
             else -> annotations
-                .filter { it.annotationClass.qualifiedName!!.startsWith(configuration.constraintsPackage) || it.annotationClass.qualifiedName == "jakarta.persistence.Id" }
-                .mapNotNull { it.annotationClass.simpleName }
+                .filter {
+                    it.annotationClass.qualifiedName!!.startsWith(configuration.constraintsPackage)
+                            || it.annotationClass.qualifiedName == "jakarta.persistence.Id"
+                            || it.annotationClass.qualifiedName == "com.bprodactivv.dataservice.core.data.SaveByText"
+                }
+                .mapNotNull {
+                    Constraints(
+                        it.annotationClass.simpleName!!,
+                        it.toString().let { text ->
+                            if ("SaveByText" in text) {
+                                text.substringAfter("@com.bprodactivv.dataservice.core.data.metadata.definition.constraints.SaveByText(field=\"")
+                                    .substringBefore("\")")
+                            } else {
+                                ""
+                            }
+                        }
+                    )
+                }
         }
 
         val multiplicity = when (type.matches(Regex("List<[a-zA-Z.]*>"))) {

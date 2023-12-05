@@ -33,7 +33,7 @@ class ProjectPersistenceService(
             when (it.parentProperty) {
                 "client", "orderingClient" -> {
                     joinPredicates.addAll(
-                        join(it, Client.CLASS_TYPE)
+                        join(it, Client.CLASS_TYPE, isSingular = true)
                     )
                 }
 
