@@ -418,9 +418,75 @@ pobierania i zapisu danych. Dzieli się na `ProQLQuery` -pobieranie danych oraz 
     "page": 0
     }
     ```
+  ProQLQuery daje również możliwość filtrowania zwracanych danych poprzez odpowiednie zbudowanie `properties`.
+  Dla pól z wartościami tekstowymi:
+  1. jeśli chcemy odnaleźć w danej kolumnie jedną z wielu wprowadzonych wartości
+  ```json
+    {
+      "type": "agile.Task",
+      "properties": {
+        "name": ["Bp2Card ", "GET na collapse"]
+      }   
+    }
+    ```
+  2. filtrowanie jednej wartości w wielu kolumnach
+  ```json
+    {
+      "type": "agile.Task",
+      "properties": {
+        "name": "Bp2Card ",
+        "type": "Bp2Card "
+      }   
+    }
+    ```
+  3. Wyświetlenie rekordów zawierających dokładnie to co wpisaliśmy
+
+  ```json
+    {
+      "type": "agile.Task",
+      "properties": {
+        "name": {"equal": "GET na collapse"}
+      }   
+    }
+    ```
+  4. Wyświetlenie rokordów nie zawierających wpisaną wartość
+  ```json
+    {
+      "type": "agile.Task",
+      "properties": {
+        "name": {"notEqual": "GET na collapse"}
+      }   
+    }
+    ```
+  Dla pól z wartościami Long lub Data:
+  1. Od do (działa tak samo dla Long i LocalDate)
+  ```json
+    {
+      "type": "agile.Task",
+      "properties": {
+        "id": {"from": "100", "to": "200"}
+      }   
+    }
+    ```
+  2. Więcej / Mniej (działa tak samo dla Long i LocalDate)
+  ```json
+    {
+      "type": "agile.Task",
+      "properties": {
+        "id": {"from": "100"}
+      }   
+    }
+    ```
+  ```json
+    {
+      "type": "agile.Task",
+      "properties": {
+        "id": {"to": "200"}
+      }   
+    }
+    ```
 
   </details>
-
 ---
 
 ## Komunikacja z innymi mikroserwisami
